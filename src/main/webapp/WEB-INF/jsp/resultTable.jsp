@@ -19,7 +19,7 @@
 		        </tr>
 		                
 		        <c:forEach var ="res"  items="${results}" >
-			        <tr>
+			        <tr <c:if test="${res.answered}">style = "background : #00ff00"</c:if> >
 			          <td>${res.dateQuestion}</td>
 			          <td>${res.title}</td>
 			          <td>${res.whoPosted}</td>
