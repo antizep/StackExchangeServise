@@ -19,37 +19,36 @@ import org.slf4j.LoggerFactory;
 @Controller
 @RequestMapping("/stackExchange")
 public class StackExchangeController {
-	
-	
+
+
 	@Autowired
 	ApplicationContext context;
-	
-	@RequestMapping(value = {"/","/index"}, method = RequestMethod.GET)
+
+	@RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
 	public String index(Model model) {
+
 		String message = "Message";
-		model.addAttribute("message",message);
+		model.addAttribute("message", message);
 		return "index";
 	}
-	
-	@RequestMapping(value = "resultTable", method = RequestMethod.GET  )
-	public String searsher(Model model,
-			@RequestParam("searshString")String searshString) {
-		
-		
-		SearshProvider provider = context.getBean("stackExchange",SearshProvider.class);
+
+	@RequestMapping(value = "resultTable", method = RequestMethod.GET)
+	public String searsher(Model model,@RequestParam("searshString") String searshString) {
+
+		SearshProvider provider = context.getBean("stackExchange", SearshProvider.class);
 		List<ResultModel> resultsList = provider.searsh(searshString);
-		
-		if(provider.getError() == null) {
-			
-			model.addAttribute("results",resultsList);
-		
-		}else {
-			
-			model.addAttribute("error",provider.getError());
-			
+
+		if (provider.getError() == null) {
+
+			model.addAttribute("results", resultsList);
+
+		} else {
+
+			model.addAttribute("error", provider.getError());
+
 		}
-		
+
 		return "resultTable";
-	
+
 	}
 }

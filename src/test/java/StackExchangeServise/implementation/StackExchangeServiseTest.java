@@ -43,13 +43,13 @@ import StackExchangeServise.services.SearshProvider;
 
 public class StackExchangeServiseTest {
 
-	@Autowired 
+	@Autowired
 	private ApplicationContext context;
 	private String searshString;
-	
+
 
 	@Before
-	public void setUp() throws Exception { 
+	public void setUp() throws Exception {
 		searshString = "java";
 	}
 
@@ -58,56 +58,55 @@ public class StackExchangeServiseTest {
 
 		Formatter formatter = new Formatter();
 		String searshUrl = formatter.format(SerashProviderStackExchange.URL_PROVIDER_STACK_EXCHANGE, searshString).toString();
-		HttpUriRequest request = new HttpGet( searshUrl );
+		HttpUriRequest request = new HttpGet(searshUrl);
 
-		HttpResponse httpResponse = HttpClientBuilder.create().build().execute( request );
+		HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
 
-		assertThat(httpResponse.getStatusLine().getStatusCode(),equalTo(HttpStatus.SC_OK));
+		assertThat(httpResponse.getStatusLine().getStatusCode(), equalTo(HttpStatus.SC_OK));
 
 		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
-		assertEquals( MediaType.APPLICATION_JSON_VALUE, mimeType );
+		assertEquals(MediaType.APPLICATION_JSON_VALUE, mimeType);
 
 		JSONObject documentJsonObject = new JSONObject(EntityUtils.toString(httpResponse.getEntity()));
 
 		assertTrue(documentJsonObject.has("items"));
 		Object items = documentJsonObject.opt("items");
 		assertEquals(items.getClass(), JSONArray.class);
-		JSONArray itemsArray =(JSONArray) items;
+		JSONArray itemsArray = (JSONArray) items;
 
-		int randIndex =(int) (Math.random() * itemsArray.length());
+		int randIndex = (int) (Math.random() * itemsArray.length());
 		JSONObject randItemJ = itemsArray.getJSONObject(randIndex);
 
 		assertTrue(randItemJ.has("title"));
-		assertEquals(randItemJ.get("title").getClass(),String.class);
+		assertEquals(randItemJ.get("title").getClass(), String.class);
 
 		assertTrue(randItemJ.has("creation_date"));
-		assertEquals(randItemJ.get("creation_date").getClass(),Integer.class);
+		assertEquals(randItemJ.get("creation_date").getClass(), Integer.class);
 
 		assertTrue(randItemJ.has("link"));
-		assertEquals(randItemJ.get("link").getClass(),String.class);
+		assertEquals(randItemJ.get("link").getClass(), String.class);
 
 		assertTrue(randItemJ.has("is_answered"));
-		assertEquals(randItemJ.get("is_answered").getClass(),Boolean.class);
+		assertEquals(randItemJ.get("is_answered").getClass(), Boolean.class);
 
 		assertTrue(randItemJ.has("owner"));
-		assertEquals(randItemJ.get("owner").getClass(),JSONObject.class);
+		assertEquals(randItemJ.get("owner").getClass(), JSONObject.class);
 
 		JSONObject owner = randItemJ.getJSONObject("owner");
 
 		assertTrue(owner.has("display_name"));
-		assertEquals(owner.get("display_name").getClass(), String.class);		   
+		assertEquals(owner.get("display_name").getClass(), String.class);
 
 	}
-	
+
 	@Test
 	public void testSearsh() {
-		SearshProvider provider = context.getBean("stackExchange",SearshProvider.class);
+		SearshProvider provider = context.getBean("stackExchange", SearshProvider.class);
 		List<ResultModel> resultsList = provider.searsh(searshString);
-		
+
 		assertNotNull(resultsList);
 		assertNull(provider.getError());
-		
-		
+
 	}
 
 }

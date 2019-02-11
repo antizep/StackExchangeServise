@@ -29,8 +29,7 @@ repositories {
 
 
 buildScan { termsOfServiceUrl = "https://gradle.com/terms-of-service"; termsOfServiceAgree = "yes" }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
 
 
 dependencies {
